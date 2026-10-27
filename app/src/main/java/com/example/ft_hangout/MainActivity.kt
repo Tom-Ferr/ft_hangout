@@ -1,33 +1,77 @@
 package com.example.ft_hangout
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var database: ContactDatabase
+    private lateinit var contactList: LinearLayout
+    private lateinit var emptyMessage: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        val database = ContactDatabase(this)
-        database.writableDatabase
+        database = ContactDatabase(this)
 
-        val addContactButton = findViewById<android.widget.Button>(
-            R.id.addContactButton
-        )
+        contactList = findViewById(R.id.contactList)
+        emptyMessage = findViewById(R.id.emptyMessage)
 
-        addContactButton.setOnClickListener {
-            val intent = android.content.Intent(this, AddContactActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.addContactButton).setOnClickListener {
+            startActivity(Intent(this, AddContactActivity::class.java))
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            view.setPadding(
+                24 + systemBars.left,
+                24 + systemBars.top,
+                24 + systemBars.right,
+                24 + systemBars.bottom
+            )
             insets
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        displayContacts()
+    }
+
+    private fun displayContacts() {
+        contactList.removeAllViews()
+
+        val contacts = database.getAllContacts()
+        emptyMessage.visibility =
+            if (contacts.isEmpty()) View.VISIBLE else View.GONE
+
+        for (contact in contacts) {
+            val contactView = TextView(this).apply {
+                text = "${contact.firstName} ${contact.lastName}\n" +
+                        "${contact.phoneNumber}\n${contact.email}"
+                textSize = 16f
+                setTextColor(android.graphics.Color.DKGRAY)
+                setPadding(0, 20, 0, 20)
+            }
+
+            contactList.addView(contactView)
+
+            val divider = View(this).apply {
+                setBackgroundColor(android.graphics.Color.LTGRAY)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    1
+                )
+            }
+            contactList.addView(divider)
         }
     }
 }
