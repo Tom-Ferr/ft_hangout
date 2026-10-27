@@ -25,6 +25,11 @@ class AddContactActivity : AppCompatActivity() {
         val addressInput = findViewById<EditText>(R.id.addressInput)
         val saveButton = findViewById<Button>(R.id.saveContactButton)
 
+        findViewById<Button>(R.id.cancelContactButton).setOnClickListener {
+            finish()
+        }
+
+
         if (editingContactId != -1L) {
             val contact = database.getAllContacts()
                 .find { it.id == editingContactId }

@@ -76,6 +76,10 @@ class ContactDetailsActivity : AppCompatActivity() {
                 .show()
         }
 
+        findViewById<Button>(R.id.goBackButton).setOnClickListener {
+            finish()
+        }
+
     }
 
     override fun onResume() {
