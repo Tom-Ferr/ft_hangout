@@ -15,6 +15,15 @@ class MainActivity : AppCompatActivity() {
         val database = ContactDatabase(this)
         database.writableDatabase
 
+        val addContactButton = findViewById<android.widget.Button>(
+            R.id.addContactButton
+        )
+
+        addContactButton.setOnClickListener {
+            val intent = android.content.Intent(this, AddContactActivity::class.java)
+            startActivity(intent)
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
