@@ -1,4 +1,3 @@
-
 package com.example.ft_hangout
 
 import android.os.Bundle
@@ -10,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 class AddContactActivity : AppCompatActivity() {
 
     private lateinit var database: ContactDatabase
+    private var editingContactId: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_contact)
 
         database = ContactDatabase(this)
+        editingContactId = intent.getLongExtra("contact_id", -1L)
 
         val firstNameInput = findViewById<EditText>(R.id.firstNameInput)
         val lastNameInput = findViewById<EditText>(R.id.lastNameInput)
@@ -23,6 +24,25 @@ class AddContactActivity : AppCompatActivity() {
         val emailInput = findViewById<EditText>(R.id.emailInput)
         val addressInput = findViewById<EditText>(R.id.addressInput)
         val saveButton = findViewById<Button>(R.id.saveContactButton)
+
+        if (editingContactId != -1L) {
+            val contact = database.getAllContacts()
+                .find { it.id == editingContactId }
+
+            if (contact == null) {
+                Toast.makeText(this, "Contact not found.", Toast.LENGTH_SHORT).show()
+                finish()
+                return
+            }
+
+            firstNameInput.setText(contact.firstName)
+            lastNameInput.setText(contact.lastName)
+            phoneInput.setText(contact.phoneNumber)
+            emailInput.setText(contact.email)
+            addressInput.setText(contact.address)
+
+            saveButton.text = "Update Contact"
+        }
 
         saveButton.setOnClickListener {
             val firstName = firstNameInput.text.toString().trim()
@@ -43,6 +63,7 @@ class AddContactActivity : AppCompatActivity() {
             }
 
             val contact = Contact(
+                id = if (editingContactId == -1L) 0L else editingContactId,
                 firstName = firstName,
                 lastName = lastName,
                 phoneNumber = phone,
@@ -50,12 +71,20 @@ class AddContactActivity : AppCompatActivity() {
                 address = address
             )
 
-            val id = database.insertContact(contact)
+            val success = if (editingContactId == -1L) {
+                database.insertContact(contact) != -1L
+            } else {
+                database.updateContact(contact) > 0
+            }
 
-            if (id != -1L) {
+            if (success) {
                 Toast.makeText(
                     this,
-                    "Contact saved successfully!",
+                    if (editingContactId == -1L) {
+                        "Contact saved successfully!"
+                    } else {
+                        "Contact updated successfully!"
+                    },
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()
