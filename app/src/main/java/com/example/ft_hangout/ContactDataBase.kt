@@ -21,6 +21,18 @@ class ContactDatabase(context: Context) :
             )
             """.trimIndent()
         )
+
+        db.execSQL(
+            """
+            CREATE TABLE $TABLE_MESSAGES (
+                $MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $MESSAGE_PHONE TEXT NOT NULL,
+                $MESSAGE_BODY TEXT NOT NULL,
+                $MESSAGE_TIMESTAMP INTEGER NOT NULL,
+                $MESSAGE_INCOMING INTEGER NOT NULL
+            )
+            """.trimIndent()
+        )
     }
 
     override fun onUpgrade(
@@ -97,6 +109,50 @@ class ContactDatabase(context: Context) :
         )
     }
 
+    fun insertMessage(
+        phoneNumber: String,
+        body: String,
+        timestamp: Long,
+        isIncoming: Boolean
+    ): Long {
+        val values = ContentValues().apply {
+            put(MESSAGE_PHONE, phoneNumber)
+            put(MESSAGE_BODY, body)
+            put(MESSAGE_TIMESTAMP, timestamp)
+            put(MESSAGE_INCOMING, if (isIncoming) 1 else 0)
+        }
+
+        return writableDatabase.insert(TABLE_MESSAGES, null, values)
+    }
+
+    fun getMessagesForPhone(phoneNumber: String): List<Message> {
+        val messages = mutableListOf<Message>()
+
+        readableDatabase.query(
+            TABLE_MESSAGES,
+            null,
+            "$MESSAGE_PHONE = ?",
+            arrayOf(phoneNumber),
+            null,
+            null,
+            "$MESSAGE_TIMESTAMP ASC"
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                messages.add(
+                    Message(
+                        id = cursor.getLong(cursor.getColumnIndexOrThrow(MESSAGE_ID)),
+                        phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(MESSAGE_PHONE)),
+                        body = cursor.getString(cursor.getColumnIndexOrThrow(MESSAGE_BODY)),
+                        timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(MESSAGE_TIMESTAMP)),
+                        isIncoming = cursor.getInt(cursor.getColumnIndexOrThrow(MESSAGE_INCOMING)) == 1
+                    )
+                )
+            }
+        }
+
+        return messages
+    }
+
     companion object {
         private const val DATABASE_NAME = "contacts.db"
         private const val DATABASE_VERSION = 1
@@ -108,5 +164,20 @@ class ContactDatabase(context: Context) :
         private const val COLUMN_PHONE = "phone"
         private const val COLUMN_EMAIL = "email"
         private const val COLUMN_ADDRESS = "address"
+
+        private const val TABLE_MESSAGES = "messages"
+        private const val MESSAGE_ID = "id"
+        private const val MESSAGE_PHONE = "phone_number"
+        private const val MESSAGE_BODY = "body"
+        private const val MESSAGE_TIMESTAMP = "timestamp"
+        private const val MESSAGE_INCOMING = "is_incoming"
     }
 }
+
+data class Message(
+    val id: Long,
+    val phoneNumber: String,
+    val body: String,
+    val timestamp: Long,
+    val isIncoming: Boolean
+)

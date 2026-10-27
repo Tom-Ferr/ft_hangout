@@ -8,7 +8,6 @@ import android.telephony.PhoneNumberUtils
 import android.widget.Toast
 
 class SmsReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             return
@@ -17,12 +16,18 @@ class SmsReceiver : BroadcastReceiver() {
         val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
         if (messages.isEmpty()) return
 
-        val sender = messages.first().originatingAddress ?: "Unknown sender"
-        val body = messages.joinToString("") {
-            it.messageBody.orEmpty()
-        }
+        val sender = messages.first().originatingAddress ?: return
+        val body = messages.joinToString("") { it.messageBody.orEmpty() }
+        val timestamp = messages.first().timestampMillis
 
         val database = ContactDatabase(context)
+
+        database.insertMessage(
+            phoneNumber = sender,
+            body = body,
+            timestamp = timestamp,
+            isIncoming = true
+        )
 
         val contact = database.getAllContacts().find {
             PhoneNumberUtils.compare(it.phoneNumber, sender)

@@ -179,7 +179,10 @@ class ContactDetailsActivity : AppCompatActivity() {
             val sentIntent = PendingIntent.getBroadcast(
                 this,
                 0,
-                Intent(this, SmsSentReceiver::class.java),
+                Intent(this, SmsSentReceiver::class.java).apply {
+                    putExtra("phone_number", smsPhoneNumber)
+                    putExtra("message", message)
+                },
                 PendingIntent.FLAG_UPDATE_CURRENT or
                         PendingIntent.FLAG_IMMUTABLE
             )

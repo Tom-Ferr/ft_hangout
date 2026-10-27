@@ -1,6 +1,6 @@
+
 package com.example.ft_hangout
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,30 +8,35 @@ import android.telephony.SmsManager
 import android.widget.Toast
 
 class SmsSentReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
-        val resultMessage = when (resultCode) {
-            Activity.RESULT_OK -> "SMS sent successfully"
+        when (resultCode) {
+            android.app.Activity.RESULT_OK -> {
+                val phoneNumber = intent.getStringExtra("phone_number")
+                val message = intent.getStringExtra("message")
 
-            SmsManager.RESULT_ERROR_GENERIC_FAILURE ->
-                "SMS failed: generic failure"
+                if (phoneNumber != null && message != null) {
+                    ContactDatabase(context).insertMessage(
+                        phoneNumber = phoneNumber,
+                        body = message,
+                        timestamp = System.currentTimeMillis(),
+                        isIncoming = false
+                    )
+                }
 
-            SmsManager.RESULT_ERROR_NO_SERVICE ->
-                "SMS failed: no cellular service"
+                Toast.makeText(
+                    context,
+                    "SMS sent successfully.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
-            SmsManager.RESULT_ERROR_RADIO_OFF ->
-                "SMS failed: radio is off"
-
-            SmsManager.RESULT_ERROR_NULL_PDU ->
-                "SMS failed: invalid SMS data"
-
-            else -> "SMS failed (code: $resultCode)"
+            else -> {
+                Toast.makeText(
+                    context,
+                    "SMS sending failed.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
-
-        Toast.makeText(
-            context,
-            resultMessage,
-            Toast.LENGTH_LONG
-        ).show()
     }
 }
