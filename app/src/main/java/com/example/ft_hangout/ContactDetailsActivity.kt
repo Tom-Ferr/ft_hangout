@@ -1,16 +1,41 @@
+
 package com.example.ft_hangout
 
+import android.Manifest
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.telephony.SmsManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class ContactDetailsActivity : AppCompatActivity() {
 
     private lateinit var database: ContactDatabase
     private var contactId: Long = -1L
+    private var smsPhoneNumber: String = ""
+
+    private val requestSmsPermission =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (granted) {
+                sendSms()
+            } else {
+                Toast.makeText(
+                    this,
+                    "SMS permission is required to send messages.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +65,15 @@ class ContactDetailsActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.detailAddress).text =
             contact.address
 
-        findViewById<Button>(R.id.editContactButton).setOnClickListener {
-            val intent = android.content.Intent(
-                this,
-                AddContactActivity::class.java
-            )
-            intent.putExtra("contact_id", contactId)
-            startActivity(intent)
-        }
+        findViewById<Button>(R.id.editContactButton)
+            .setOnClickListener {
+                val editIntent = Intent(
+                    this,
+                    AddContactActivity::class.java
+                )
+                editIntent.putExtra("contact_id", contactId)
+                startActivity(editIntent)
+            }
 
 
         findViewById<Button>(R.id.deleteContactButton).setOnClickListener {
@@ -80,6 +106,34 @@ class ContactDetailsActivity : AppCompatActivity() {
             finish()
         }
 
+        findViewById<Button>(R.id.sendSmsButton)
+            .setOnClickListener {
+                smsPhoneNumber = contact.phoneNumber
+
+                val message = findViewById<EditText>(
+                    R.id.smsMessageInput
+                ).text.toString().trim()
+
+                if (message.isEmpty()) {
+                    findViewById<EditText>(
+                        R.id.smsMessageInput
+                    ).error = "Enter a message"
+                    return@setOnClickListener
+                }
+
+                if (
+                    ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.SEND_SMS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    sendSms()
+                } else {
+                    requestSmsPermission.launch(
+                        Manifest.permission.SEND_SMS
+                    )
+                }
+            }
     }
 
     override fun onResume() {
@@ -106,4 +160,46 @@ class ContactDetailsActivity : AppCompatActivity() {
             contact.address
     }
 
+    private fun sendSms() {
+        val messageInput = findViewById<EditText>(
+            R.id.smsMessageInput
+        )
+        val message = messageInput.text.toString().trim()
+
+        if (message.isEmpty()) {
+            messageInput.error = "Enter a message"
+            return
+        }
+
+        try {
+            val smsManager = getSystemService(
+                SmsManager::class.java
+            )
+
+            val sentIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                Intent(this, SmsSentReceiver::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                        PendingIntent.FLAG_IMMUTABLE
+            )
+
+            smsManager.sendTextMessage(
+                smsPhoneNumber,
+                null,
+                message,
+                sentIntent,
+                null
+            )
+
+            messageInput.text.clear()
+
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                "Could not send SMS: ${e.message}",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 }

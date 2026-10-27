@@ -85,12 +85,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Delete Contact" />
+
         <Button
             android:id="@+id/goBackButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Go Back"
             android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/sendSmsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send SMS" />
+
+        <EditText
+            android:id="@+id/smsMessageInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Write a message"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="2"
+            android:gravity="top|start" />
+
+
 
     </LinearLayout>
 </ScrollView>

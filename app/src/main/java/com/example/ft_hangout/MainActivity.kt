@@ -9,6 +9,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,9 +21,36 @@ class MainActivity : AppCompatActivity() {
     private lateinit var contactList: LinearLayout
     private lateinit var emptyMessage: TextView
 
+    private val requestReceiveSmsPermission =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (granted) {
+                Toast.makeText(
+                    this,
+                    "SMS receiving permission granted.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "SMS receiving permission denied.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECEIVE_SMS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestReceiveSmsPermission.launch(Manifest.permission.RECEIVE_SMS)
+        }
 
         database = ContactDatabase(this)
 
