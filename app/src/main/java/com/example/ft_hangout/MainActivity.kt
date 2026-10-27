@@ -60,6 +60,18 @@ class MainActivity : AppCompatActivity() {
                 textSize = 16f
                 setTextColor(android.graphics.Color.DKGRAY)
                 setPadding(0, 20, 0, 20)
+
+                isClickable = true
+                isFocusable = true
+
+                setOnClickListener {
+                    val intent = Intent(
+                        this@MainActivity,
+                        ContactDetailsActivity::class.java
+                    )
+                    intent.putExtra("contact_id", contact.id)
+                    startActivity(intent)
+                }
             }
 
             contactList.addView(contactView)
