@@ -54,4 +54,10 @@
     <string name="sms_receiving_permission_denied">Autorisation de réception des SMS refusée.</string>
     <string name="last_background_time">Dernière mise en arrière-plan : %1$s</string>
 
+    <string name="change_header_color">Changer la couleur de l\'en-tête</string>
+    <string name="color_blue">Bleu</string>
+    <string name="color_green">Vert</string>
+    <string name="color_red">Rouge</string>
+    <string name="color_default">Par défaut</string>
+
 </resources>

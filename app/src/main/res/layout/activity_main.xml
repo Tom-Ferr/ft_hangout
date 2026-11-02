@@ -7,13 +7,14 @@
     android:padding="24dp">
 
     <TextView
+        android:id="@+id/headerTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/my_contacts"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#222222"
-        android:paddingBottom="16dp" />
+        android:padding="16dp" />
 
     <Button
         android:id="@+id/addContactButton"

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/changeHeaderColor"
+        android:title="@string/change_header_color">
+
+        <menu>
+            <item
+                android:id="@+id/colorBlue"
+                android:title="@string/color_blue" />
+
+            <item
+                android:id="@+id/colorGreen"
+                android:title="@string/color_green" />
+
+            <item
+                android:id="@+id/colorRed"
+                android:title="@string/color_red" />
+
+            <item
+                android:id="@+id/colorDefault"
+                android:title="@string/color_default" />
+        </menu>
+    </item>
+
+</menu>

@@ -54,5 +54,11 @@
     <string name="sms_receiving_permission_denied">SMS receiving permission denied.</string>
     <string name="last_background_time">Last background time: %1$s</string>
 
+    <string name="change_header_color">Change header color</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_green">Green</string>
+    <string name="color_red">Red</string>
+    <string name="color_default">Default</string>
+
 
 </resources>

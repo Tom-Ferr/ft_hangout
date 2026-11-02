@@ -3,7 +3,10 @@ package com.example.ft_hangout
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -26,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: ContactDatabase
     private lateinit var contactList: LinearLayout
     private lateinit var emptyMessage: TextView
+    private lateinit var headerTitle: TextView
 
     private val preferences by lazy {
         getSharedPreferences("ft_hangouts_preferences", MODE_PRIVATE)
@@ -96,6 +100,9 @@ class MainActivity : AppCompatActivity() {
 
         contactList = findViewById(R.id.contactList)
         emptyMessage = findViewById(R.id.emptyMessage)
+        headerTitle = findViewById(R.id.headerTitle)
+
+        applyHeaderColor()
 
         findViewById<Button>(R.id.addContactButton).setOnClickListener {
             startActivity(Intent(this, AddContactActivity::class.java))
@@ -111,6 +118,42 @@ class MainActivity : AppCompatActivity() {
             )
             insets
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val selectedColor = when (item.itemId) {
+            R.id.colorBlue -> Color.BLUE
+            R.id.colorGreen -> Color.GREEN
+            R.id.colorRed -> Color.RED
+            R.id.colorDefault -> Color.TRANSPARENT
+            else -> return super.onOptionsItemSelected(item)
+        }
+
+        preferences.edit()
+            .putInt("header_color", selectedColor)
+            .apply()
+
+        applyHeaderColor()
+        return true
+    }
+
+    private fun applyHeaderColor() {
+        val color = preferences.getInt("header_color", Color.TRANSPARENT)
+
+        headerTitle.setBackgroundColor(color)
+
+        headerTitle.setTextColor(
+            if (color == Color.TRANSPARENT || color == Color.GREEN) {
+                Color.DKGRAY
+            } else {
+                Color.WHITE
+            }
+        )
     }
 
     override fun onResume() {
@@ -130,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                 text = "${contact.firstName} ${contact.lastName}\n" +
                         "${contact.phoneNumber}\n${contact.email}"
                 textSize = 16f
-                setTextColor(android.graphics.Color.DKGRAY)
+                setTextColor(Color.DKGRAY)
                 setPadding(0, 20, 0, 20)
 
                 isClickable = true
@@ -148,7 +191,7 @@ class MainActivity : AppCompatActivity() {
             contactList.addView(contactView)
 
             val divider = View(this).apply {
-                setBackgroundColor(android.graphics.Color.LTGRAY)
+                setBackgroundColor(Color.LTGRAY)
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     1
