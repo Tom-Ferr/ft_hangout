@@ -52,6 +52,7 @@
 
     <string name="sms_receiving_permission_granted">SMS receiving permission granted.</string>
     <string name="sms_receiving_permission_denied">SMS receiving permission denied.</string>
+    <string name="last_background_time">Last background time: %1$s</string>
 
 
 </resources>

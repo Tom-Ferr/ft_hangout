@@ -1,25 +1,63 @@
 package com.example.ft_hangout
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import android.widget.Toast
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var database: ContactDatabase
     private lateinit var contactList: LinearLayout
     private lateinit var emptyMessage: TextView
+
+    private val preferences by lazy {
+        getSharedPreferences("ft_hangouts_preferences", MODE_PRIVATE)
+    }
+
+    private val appLifecycleObserver = object : DefaultLifecycleObserver {
+
+        override fun onStop(owner: LifecycleOwner) {
+            preferences.edit()
+                .putLong("background_timestamp", System.currentTimeMillis())
+                .apply()
+        }
+
+        override fun onStart(owner: LifecycleOwner) {
+            val timestamp = preferences.getLong("background_timestamp", 0L)
+
+            if (timestamp != 0L) {
+                val dateFormat = SimpleDateFormat(
+                    "dd/MM/yyyy HH:mm:ss",
+                    Locale.getDefault()
+                )
+
+                val formattedTimestamp = dateFormat.format(Date(timestamp))
+
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.last_background_time, formattedTimestamp),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
 
     private val requestReceiveSmsPermission =
         registerForActivityResult(
@@ -43,6 +81,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(appLifecycleObserver)
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -105,7 +145,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-
             contactList.addView(contactView)
 
             val divider = View(this).apply {
@@ -115,7 +154,6 @@ class MainActivity : AppCompatActivity() {
                     1
                 )
             }
-
             contactList.addView(divider)
         }
     }

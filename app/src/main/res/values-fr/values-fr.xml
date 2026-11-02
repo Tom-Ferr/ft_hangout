@@ -52,5 +52,6 @@
 
     <string name="sms_receiving_permission_granted">Autorisation de réception des SMS accordée.</string>
     <string name="sms_receiving_permission_denied">Autorisation de réception des SMS refusée.</string>
+    <string name="last_background_time">Dernière mise en arrière-plan : %1$s</string>
 
 </resources>
