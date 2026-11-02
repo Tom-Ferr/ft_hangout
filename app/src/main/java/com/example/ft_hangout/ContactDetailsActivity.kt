@@ -1,4 +1,3 @@
-
 package com.example.ft_hangout
 
 import android.Manifest
@@ -31,7 +30,7 @@ class ContactDetailsActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "SMS permission is required to send messages.",
+                    getString(R.string.sms_permission_required),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -48,7 +47,11 @@ class ContactDetailsActivity : AppCompatActivity() {
             .find { it.id == contactId }
 
         if (contact == null) {
-            Toast.makeText(this, "Contact not found.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                getString(R.string.contact_not_found),
+                Toast.LENGTH_SHORT
+            ).show()
             finish()
             return
         }
@@ -75,36 +78,37 @@ class ContactDetailsActivity : AppCompatActivity() {
                 startActivity(editIntent)
             }
 
+        findViewById<Button>(R.id.deleteContactButton)
+            .setOnClickListener {
+                AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.delete_contact))
+                    .setMessage(getString(R.string.confirm_delete_contact))
+                    .setNegativeButton(getString(R.string.cancel), null)
+                    .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                        val deletedRows = database.deleteContact(contactId)
 
-        findViewById<Button>(R.id.deleteContactButton).setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Delete Contact")
-                .setMessage("Are you sure you want to delete this contact?")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete") { _, _ ->
-                    val deletedRows = database.deleteContact(contactId)
-
-                    if (deletedRows > 0) {
-                        Toast.makeText(
-                            this,
-                            "Contact deleted.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        finish()
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "Could not delete contact.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (deletedRows > 0) {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.contact_deleted),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        } else {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.could_not_delete_contact),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                }
-                .show()
-        }
+                    .show()
+            }
 
-        findViewById<Button>(R.id.goBackButton).setOnClickListener {
-            finish()
-        }
+        findViewById<Button>(R.id.goBackButton)
+            .setOnClickListener {
+                finish()
+            }
 
         findViewById<Button>(R.id.sendSmsButton)
             .setOnClickListener {
@@ -117,7 +121,7 @@ class ContactDetailsActivity : AppCompatActivity() {
                 if (message.isEmpty()) {
                     findViewById<EditText>(
                         R.id.smsMessageInput
-                    ).error = "Enter a message"
+                    ).error = getString(R.string.enter_message)
                     return@setOnClickListener
                 }
 
@@ -133,6 +137,16 @@ class ContactDetailsActivity : AppCompatActivity() {
                         Manifest.permission.SEND_SMS
                     )
                 }
+            }
+
+        findViewById<Button>(R.id.viewConversationButton)
+            .setOnClickListener {
+                val intent = Intent(
+                    this,
+                    ConversationActivity::class.java
+                )
+                intent.putExtra("phone_number", contact.phoneNumber)
+                startActivity(intent)
             }
     }
 
@@ -167,7 +181,7 @@ class ContactDetailsActivity : AppCompatActivity() {
         val message = messageInput.text.toString().trim()
 
         if (message.isEmpty()) {
-            messageInput.error = "Enter a message"
+            messageInput.error = getString(R.string.enter_message)
             return
         }
 
@@ -200,7 +214,7 @@ class ContactDetailsActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(
                 this,
-                "Could not send SMS: ${e.message}",
+                getString(R.string.could_not_send_sms, e.message ?: ""),
                 Toast.LENGTH_LONG
             ).show()
         }

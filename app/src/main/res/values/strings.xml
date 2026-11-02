@@ -1,3 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ft_hangout</string>
+    <string name="app_name">ft_hangouts</string>
+
+    <string name="my_contacts">My Contacts</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="edit_contact">Edit Contact</string>
+    <string name="delete_contact">Delete Contact</string>
+
+    <string name="save_contact">Save Contact</string>
+    <string name="cancel">Cancel</string>
+    <string name="go_back">Go Back</string>
+
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="email">Email</string>
+    <string name="address">Address</string>
+
+    <string name="send_sms">Send SMS</string>
+    <string name="view_conversation">View Conversation</string>
+    <string name="conversation_history">Conversation History</string>
+    <string name="no_messages">No messages yet.</string>
+    <string name="received">Received</string>
+    <string name="sent">Sent</string>
+    <string name="contact_not_found">Contact not found.</string>
+
+    <string name="contact_details">Contact Details</string>
+    <string name="phone">Phone</string>
+    <string name="write_message">Write a message</string>
+    <string name="no_contacts">No contacts yet. Add your first contact!</string>
+
+    <string name="update_contact">Update Contact</string>
+    <string name="fill_all_fields">Please fill in all fields.</string>
+    <string name="contact_saved_successfully">Contact saved successfully!</string>
+    <string name="contact_updated_successfully">Contact updated successfully!</string>
+    <string name="could_not_save_contact">Could not save contact.</string>
+
+
+    <string name="confirm_delete_contact">Are you sure you want to delete this contact?</string>
+    <string name="delete">Delete</string>
+    <string name="contact_deleted">Contact deleted.</string>
+    <string name="could_not_delete_contact">Could not delete contact.</string>
+    <string name="sms_permission_required">SMS permission is required to send messages.</string>
+    <string name="enter_message">Enter a message</string>
+    <string name="could_not_send_sms">Could not send SMS: %1$s</string>
+
+    <string name="sms_sent_successfully">SMS sent successfully.</string>
+    <string name="sms_sending_failed">SMS sending failed.</string>
+
+    <string name="sms_received_from">SMS received from %1$s: %2$s</string>
+
+    <string name="sms_receiving_permission_granted">SMS receiving permission granted.</string>
+    <string name="sms_receiving_permission_denied">SMS receiving permission denied.</string>
+
+
 </resources>

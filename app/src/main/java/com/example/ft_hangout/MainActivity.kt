@@ -28,13 +28,13 @@ class MainActivity : AppCompatActivity() {
             if (granted) {
                 Toast.makeText(
                     this,
-                    "SMS receiving permission granted.",
+                    getString(R.string.sms_receiving_permission_granted),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 Toast.makeText(
                     this,
-                    "SMS receiving permission denied.",
+                    getString(R.string.sms_receiving_permission_denied),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity() {
                     1
                 )
             }
+
             contactList.addView(divider)
         }
     }

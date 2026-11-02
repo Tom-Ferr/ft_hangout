@@ -1,10 +1,8 @@
-
 package com.example.ft_hangout
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.telephony.SmsManager
 import android.widget.Toast
 
 class SmsSentReceiver : BroadcastReceiver() {
@@ -25,7 +23,7 @@ class SmsSentReceiver : BroadcastReceiver() {
 
                 Toast.makeText(
                     context,
-                    "SMS sent successfully.",
+                    context.getString(R.string.sms_sent_successfully),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -33,7 +31,7 @@ class SmsSentReceiver : BroadcastReceiver() {
             else -> {
                 Toast.makeText(
                     context,
-                    "SMS sending failed.",
+                    context.getString(R.string.sms_sending_failed),
                     Toast.LENGTH_LONG
                 ).show()
             }

@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Contact Details"
+            android:text="@string/contact_details"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#222222"
@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Phone"
+            android:text="@string/phone"
             android:textStyle="bold"
             android:textColor="#666666" />
 
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Email"
+            android:text="@string/email"
             android:textStyle="bold"
             android:textColor="#666666" />
 
@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Address"
+            android:text="@string/address"
             android:textStyle="bold"
             android:textColor="#666666" />
 
@@ -78,37 +78,41 @@
             android:id="@+id/editContactButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit Contact" />
+            android:text="@string/edit_contact" />
 
         <Button
             android:id="@+id/deleteContactButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Delete Contact" />
+            android:text="@string/delete_contact" />
 
         <Button
             android:id="@+id/goBackButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Go Back"
+            android:text="@string/go_back"
             android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/viewConversationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_conversation" />
 
         <Button
             android:id="@+id/sendSmsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Send SMS" />
+            android:text="@string/send_sms" />
 
         <EditText
             android:id="@+id/smsMessageInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Write a message"
+            android:hint="@string/write_message"
             android:inputType="textMultiLine|textCapSentences"
             android:minLines="2"
             android:gravity="top|start" />
-
-
 
     </LinearLayout>
 </ScrollView>

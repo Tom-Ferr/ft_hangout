@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Contact"
+            android:text="@string/add_contact"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#222222"
@@ -23,7 +23,7 @@
             android:id="@+id/firstNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="First name"
+            android:hint="@string/first_name"
             android:inputType="textPersonName"
             android:autofillHints="name"
             android:maxLines="1" />
@@ -32,7 +32,7 @@
             android:id="@+id/lastNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Last name"
+            android:hint="@string/last_name"
             android:inputType="textPersonName"
             android:autofillHints="name"
             android:maxLines="1" />
@@ -41,7 +41,7 @@
             android:id="@+id/phoneInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone number"
+            android:hint="@string/phone_number"
             android:inputType="phone"
             android:autofillHints="phone"
             android:maxLines="1" />
@@ -50,7 +50,7 @@
             android:id="@+id/emailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:autofillHints="emailAddress"
             android:maxLines="1" />
@@ -59,7 +59,7 @@
             android:id="@+id/addressInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Address"
+            android:hint="@string/address"
             android:inputType="textPostalAddress"
             android:autofillHints="postalAddress"
             android:minLines="2"
@@ -69,17 +69,15 @@
             android:id="@+id/saveContactButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save Contact"
+            android:text="@string/save_contact"
             android:layout_marginTop="24dp" />
-
 
         <Button
             android:id="@+id/cancelContactButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:layout_marginTop="8dp" />
-
 
     </LinearLayout>
 </ScrollView>

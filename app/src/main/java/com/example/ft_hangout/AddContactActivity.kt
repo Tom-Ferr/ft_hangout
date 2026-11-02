@@ -29,13 +29,16 @@ class AddContactActivity : AppCompatActivity() {
             finish()
         }
 
-
         if (editingContactId != -1L) {
             val contact = database.getAllContacts()
                 .find { it.id == editingContactId }
 
             if (contact == null) {
-                Toast.makeText(this, "Contact not found.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.contact_not_found),
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
                 return
             }
@@ -46,7 +49,7 @@ class AddContactActivity : AppCompatActivity() {
             emailInput.setText(contact.email)
             addressInput.setText(contact.address)
 
-            saveButton.text = "Update Contact"
+            saveButton.text = getString(R.string.update_contact)
         }
 
         saveButton.setOnClickListener {
@@ -61,7 +64,7 @@ class AddContactActivity : AppCompatActivity() {
             ) {
                 Toast.makeText(
                     this,
-                    "Please fill in all fields.",
+                    getString(R.string.fill_all_fields),
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
@@ -86,9 +89,9 @@ class AddContactActivity : AppCompatActivity() {
                 Toast.makeText(
                     this,
                     if (editingContactId == -1L) {
-                        "Contact saved successfully!"
+                        getString(R.string.contact_saved_successfully)
                     } else {
-                        "Contact updated successfully!"
+                        getString(R.string.contact_updated_successfully)
                     },
                     Toast.LENGTH_SHORT
                 ).show()
@@ -96,7 +99,7 @@ class AddContactActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "Could not save contact.",
+                    getString(R.string.could_not_save_contact),
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -23,7 +23,9 @@ class SmsReceiver : BroadcastReceiver() {
         val database = ContactDatabase(context)
 
         database.insertMessage(
-            phoneNumber = sender,
+            phoneNumber = database.getAllContacts().find {
+                PhoneNumberUtils.compare(it.phoneNumber, sender)
+            }?.phoneNumber ?: sender,
             body = body,
             timestamp = timestamp,
             isIncoming = true
@@ -41,7 +43,7 @@ class SmsReceiver : BroadcastReceiver() {
 
         Toast.makeText(
             context,
-            "SMS received from $senderName: $body",
+            context.getString(R.string.sms_received_from, senderName, body),
             Toast.LENGTH_LONG
         ).show()
     }

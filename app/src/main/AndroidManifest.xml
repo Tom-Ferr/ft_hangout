@@ -30,6 +30,9 @@
         <activity
             android:name=".ContactDetailsActivity"
             android:exported="false" />
+        <activity
+            android:name=".ConversationActivity"
+            android:exported="false" />
 
         <receiver
             android:name=".SmsReceiver"
